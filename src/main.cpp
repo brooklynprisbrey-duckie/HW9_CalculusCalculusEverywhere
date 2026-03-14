@@ -14,7 +14,7 @@ int main(){
     cout << "hello world\n"
         "it is calculus time\n" << endl;
 
-    double inputArray[arraySize][arraySize];
+    double inputArray[arraySize][arraySize];//array of array is for results. keep input array simple
     int numCount = 0;
 
     for (int j = 0; j < arraySize; j++) {
