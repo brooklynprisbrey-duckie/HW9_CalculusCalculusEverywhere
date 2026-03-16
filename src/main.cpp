@@ -1,19 +1,24 @@
 #include <iostream>
+#include <cmath>
 #include <sstream> //delete after testing
 using namespace std;
 
+const int arraySize = 20;
+
 struct StoreValues {
-    int numCount;
-    double mean;
-    double median;
-    double range;
+    int numCount=0;
+    double mean=0;
+    double median=0;
+    double modeArray[2][arraySize];
+    double range=0;
+    double svariance=0;
+    double standdist=0;
     void printArr(double* arrpointer);
     double aAverage(double* arrpointer);
     double aMedian(double* arrpointer);
+    double aMode(double* arrpointer);
     double aVariance(double* arrpointer);
 };
-
-const int arraySize = 20;
 
 int pullArr(double* arrpointer, int placeholder);
 
@@ -57,13 +62,24 @@ int main(){
     UserValues.printArr(sortArray);
 
     UserValues.aAverage(sortArray);
-    cout << "Average of dataset: " << UserValues.mean << endl;
+    cout << "Central Tendency\n"
+        "Average of dataset: " << UserValues.mean << endl;
 
     UserValues.aMedian(sortArray);
     cout << "Median of dataset: " << UserValues.median << endl;
 
+    UserValues.aMode(sortArray);
+
+
     UserValues.range = sortArray[numCount - 1] - sortArray[0];
-    cout << "Range of dataset: " << UserValues.range << endl;
+    cout << "Dispersion\n"
+        "Range of dataset: " << UserValues.range << endl;
+
+    UserValues.aVariance(sortArray);
+    cout << "Sample variance of dataset: " << UserValues.svariance << endl;
+
+    UserValues.standdist = pow(UserValues.svariance,0.5);
+    cout << "Standard distribution of dataset: " << UserValues.standdist << endl;
 
 
 
@@ -73,7 +89,7 @@ int main(){
 //pass in pointer to array, leaves on failure in insert.
 int pullArr(double* arrpointer, int placeholder) {
     istringstream testing{};//replace testing with cin
-    testing.str("0.11 0.2234 762.256 51.860 80.8");
+    testing.str("85 90 83 92 100");
 
     cout << "Enter list of numbers, space-seperated." << endl;
     for (placeholder; placeholder < arraySize; placeholder++) {
@@ -118,8 +134,29 @@ double StoreValues::aMedian(double* arrpointer) {
     return median;
 };
 
-double StoreValues::aVariance(double* arrpointer) {
+double StoreValues::aMode(double* arrpointer) {
+    int placeholder = 0;
+    for (int j = 0; j < numCount; j++)
+        for (int i = 0; i < numCount; i++) {
+            if (arrpointer[i] == modeArray[0][placeholder]) {
+                modeArray[1][placeholder] += 1;
+            }
+            else {
+                modeArray[0][placeholder] = arrpointer[i];
+                modeArray[1][placeholder] = 0;
+                placeholder += 1;
+            }
+        }
+    return modeArray[0][placeholder];
+};
 
+double StoreValues::aVariance(double* arrpointer) {
+    for (int i = 0; i < numCount; i++) {
+        double ph = arrpointer[i] - mean;
+        svariance += pow(ph, 2);
+    }
+    svariance /= (numCount - 1);
+    return svariance;
 }
 
 void sort(double* arrpointer, int numCount) {
