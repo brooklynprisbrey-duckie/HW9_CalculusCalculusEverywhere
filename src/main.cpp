@@ -2,22 +2,28 @@
 #include <sstream> //delete after testing
 using namespace std;
 
+struct StoreValues {
+    int numCount;
+    double mean;
+    double median;
+    double range;
+    void printArr(double* arrpointer);
+    double aAverage(double* arrpointer);
+    double aMedian(double* arrpointer);
+    double aVariance(double* arrpointer);
+};
+
+const int arraySize = 20;
+
 int pullArr(double* arrpointer, int placeholder);
 
-void printArr(double* arrpointer, int numcount);
-
-double aAverage(double* arrpointer, int numcount);
-
-double aMedian(double* arrpointer, int numcount);
-
 void sort(double* arrpointer, int numcount);
-
-const int arraySize = 20; //for easy adjustment
 
 int main(){
     cout << "hello world\n"
         "it is calculus time\n" << endl;
 
+    StoreValues UserValues;
     double inputArray[arraySize];//array of array is for results. keep input array simple
     int numCount = 0;
 
@@ -42,18 +48,24 @@ int main(){
             cout << numCount << " numbers entered, array is full." << endl;
         }
     }
+    UserValues.numCount = numCount;
 
     double sortArray[arraySize];
     copy(inputArray, inputArray + numCount, sortArray);
     sort(sortArray, numCount);
 
-    printArr(sortArray, numCount);
+    UserValues.printArr(sortArray);
 
-    double average = aAverage(sortArray, numCount);
-    cout << "Average of dataset: " << average << endl;
+    UserValues.aAverage(sortArray);
+    cout << "Average of dataset: " << UserValues.mean << endl;
 
-    double median = aMedian(sortArray, numCount);
-    cout << "Median of dataset: " << median << endl;
+    UserValues.aMedian(sortArray);
+    cout << "Median of dataset: " << UserValues.median << endl;
+
+    UserValues.range = sortArray[numCount - 1] - sortArray[0];
+    cout << "Range of dataset: " << UserValues.range << endl;
+
+
 
     return 0;
 }
@@ -79,31 +91,36 @@ int pullArr(double* arrpointer, int placeholder) {
     return placeholder;
 };
 
-void printArr(double* arrpointer, int numcount) {
-    for (int i = 0; i < numcount; i++) {
+void StoreValues::printArr(double* arrpointer) {
+    for (int i = 0; i < numCount; i++) {
         cout << '[' << arrpointer[i] << ']';
     }
     cout << endl;
     return;
 }
 
-double aAverage(double* arrpointer, int numcount) {
+double StoreValues::aAverage(double* arrpointer) {
     double total = 0;
-    for (int i = 0; i < numcount; i++) {
+    for (int i = 0; i < numCount; i++) {
         total += arrpointer[i];
     }
-    return total / numcount;
+    mean = total / numCount;
+    return total / numCount;
 };
 
-double aMedian(double* arrpointer, int numcount) {
-    int iMedian = (numcount / 2);
-    double median = arrpointer[iMedian];
-    if (!(numcount % 2)) {
+double StoreValues::aMedian(double* arrpointer) {
+    int iMedian = (numCount / 2);
+    median = arrpointer[iMedian];
+    if (!(numCount % 2)) {
         median += arrpointer[iMedian - 1];
         median /= 2;
     }
     return median;
 };
+
+double StoreValues::aVariance(double* arrpointer) {
+
+}
 
 void sort(double* arrpointer, int numCount) {
     for (int j = 0; j < numCount; j++) {
