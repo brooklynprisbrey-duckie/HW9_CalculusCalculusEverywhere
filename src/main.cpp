@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cmath>
-#include <sstream> //delete after testing
+#include <sstream>
 using namespace std;
 
-const int arraySize = 20;
+const int arraySize = 15;
 
 struct StoreValues {
     int numCount=0;
@@ -16,7 +16,7 @@ struct StoreValues {
     void printArr(double* arrpointer);
     double aAverage(double* arrpointer);
     double aMedian(double* arrpointer);
-    double aMode(double* arrpointer);
+    string aMode(double* arrpointer);
     double aVariance(double* arrpointer);
 };
 
@@ -68,8 +68,7 @@ int main(){
     UserValues.aMedian(sortArray);
     cout << "Median of dataset: " << UserValues.median << endl;
 
-    UserValues.aMode(sortArray);
-
+    cout << "Modes of dataset: " << UserValues.aMode(sortArray) << endl;
 
     UserValues.range = sortArray[numCount - 1] - sortArray[0];
     cout << "Dispersion\n"
@@ -81,15 +80,13 @@ int main(){
     UserValues.standdist = pow(UserValues.svariance,0.5);
     cout << "Standard distribution of dataset: " << UserValues.standdist << endl;
 
-
-
     return 0;
 }
 
 //pass in pointer to array, leaves on failure in insert.
 int pullArr(double* arrpointer, int placeholder) {
     istringstream testing{};//replace testing with cin
-    testing.str("85 90 83 92 100");
+    cin >> testing;
 
     cout << "Enter list of numbers, space-seperated." << endl;
     for (placeholder; placeholder < arraySize; placeholder++) {
@@ -134,20 +131,45 @@ double StoreValues::aMedian(double* arrpointer) {
     return median;
 };
 
-double StoreValues::aMode(double* arrpointer) {
+string StoreValues::aMode(double* arrpointer) {
     int placeholder = 0;
-    for (int j = 0; j < numCount; j++)
+    for (int j = 0; j < numCount; j++) {
+        bool update = true;
         for (int i = 0; i < numCount; i++) {
-            if (arrpointer[i] == modeArray[0][placeholder]) {
-                modeArray[1][placeholder] += 1;
-            }
-            else {
-                modeArray[0][placeholder] = arrpointer[i];
-                modeArray[1][placeholder] = 0;
-                placeholder += 1;
+            if (arrpointer[j] == modeArray[0][i]) {
+                modeArray[1][i] += 1;
+                update = false;
             }
         }
-    return modeArray[0][placeholder];
+        if (update) {
+            modeArray[0][placeholder] = arrpointer[j];
+            modeArray[1][placeholder] = 0;
+            placeholder += 1;
+        }
+    }
+    int max = 0;
+    int min = numCount;
+    for (int i = 0; i < placeholder; i++) {
+        if (modeArray[1][i] > max) {
+            max = modeArray[1][i];
+        }
+        else if (modeArray[1][i] < min) {
+            min = modeArray[1][i];
+        }
+    }
+    if (max != min) {
+        string maxList = "";
+        for (int i = 0; i < placeholder; i++) {
+            if (modeArray[1][i] == max) {
+                ostringstream strs;
+                strs << modeArray[0][i];
+                maxList += strs.str();
+                maxList += ", ";
+            }
+        }
+        return maxList;
+    }
+    else return "No mode";
 };
 
 double StoreValues::aVariance(double* arrpointer) {
