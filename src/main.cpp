@@ -14,28 +14,22 @@ int main(){
     cout << "hello world\n"
         "it is calculus time\n" << endl;
 
-    double inputArray[arraySize][arraySize];//array of array is for results. keep input array simple
+    double inputArray[arraySize];//array of array is for results. keep input array simple
     int numCount = 0;
 
-    for (int j = 0; j < arraySize; j++) {
-        for (int i = 0; i < arraySize; i++) {
-            i = pullArr(inputArray[j], i);//adjust position in array
-            numCount += i;
-            cout << numCount << " numbers entered\n"
-                "Is that all? Enter 'y' if it is." << endl;
-            if (cin.peek() == 'y' || cin.peek() == 'Y') {
-                break;
-            }
-        }
-        if (cin.peek() == 'y' || cin.peek() == 'Y') {//passes out break
+    for (int i = 0; i < arraySize; i++) {
+        i = pullArr(inputArray, i);//adjust position in array
+        numCount += i;
+        cout << numCount << " numbers entered\n"
+            "Is that all? Enter 'y' if it is." << endl;
+        if (cin.peek() == 'y' || cin.peek() == 'Y') {
             break;
         }
-        cin.clear();
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    double sortArray = inputArray;
-    sort(sortArray[1]);
+    double sortArray[arraySize];
+    copy(inputArray, inputArray + arraySize, sortArray);
+    sort(sortArray);
 
     return 0;
 }
@@ -55,6 +49,7 @@ int pullArr(double* arrpointer, int placeholder) {
             testing.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             break;
         }
+
     }
     return placeholder;
 };
