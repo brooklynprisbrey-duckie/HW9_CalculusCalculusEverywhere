@@ -39,9 +39,6 @@ int main(){
             cout << numCount << " numbers entered\n"
                 "Is that all? Enter 'y' if it is." << endl;
 
-            cin.clear();//should be able to remove this later
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
             if (cin.peek() == 'y' || cin.peek() == 'Y') {
                 cin.clear();
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -85,17 +82,15 @@ int main(){
 
 //pass in pointer to array, leaves on failure in insert.
 int pullArr(double* arrpointer, int placeholder) {
-    istringstream testing{};//replace testing with cin
-    cin >> testing;
 
-    cout << "Enter list of numbers, space-seperated." << endl;
+    cout << "Enter list of numbers, space-seperated. Enter 'done' when done." << endl;
     for (placeholder; placeholder < arraySize; placeholder++) {
 
-        testing >> arrpointer[placeholder];
+        cin >> arrpointer[placeholder];
 
-        if (testing.fail()) {
-            testing.clear();
-            testing.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             placeholder -= 1;
             break;
         }
